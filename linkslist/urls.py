@@ -7,4 +7,5 @@ urlpatterns = [
     # url(r'^linksbyidfolder/(?P<pk>[0-9]+)$', views.LinkListByIdFolder.as_view()),
     url(r'^categories/$', views.CategoryList.as_view()),
     url(r'^folders/$', views.FolderAweList.as_view()),
+    url(r'^folders/(?P<pk>[0-9]+)$', views.FolderAweDetail.as_view()),
 ]

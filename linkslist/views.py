@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from linkslist.models import LinkData, Category, FolderAwe
-from linkslist.serializers import LinkSerializer, CategorySerializer, FolderAweSerializer
+from linkslist.serializers import LinkSerializer, CategorySerializer, FolderAweSerializer, FolderAweDetailSerializer
 
 
 class LinkList(generics.ListCreateAPIView):
@@ -22,3 +22,10 @@ class CategoryList(generics.ListCreateAPIView):
 class FolderAweList(generics.ListCreateAPIView):
     queryset = FolderAwe.objects.all()
     serializer_class = FolderAweSerializer
+
+
+class FolderAweDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FolderAwe.objects.all()
+    serializer_class = FolderAweDetailSerializer
+
+

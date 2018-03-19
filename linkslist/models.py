@@ -11,7 +11,7 @@ class FolderAwe(models.Model):
 class Category(models.Model):
     title = models.TextField()
     parentcat = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
-    folder = models.ForeignKey(FolderAwe, on_delete=models.CASCADE, null=True, related_name='idfolder')
+    folder = models.ForeignKey(FolderAwe, on_delete=models.CASCADE, related_name='categories')
 
 
 class LinkData(models.Model):
@@ -21,5 +21,4 @@ class LinkData(models.Model):
     siteurl = models.TextField()
     sitename = models.CharField(max_length=100, blank=True)
     createdate = models.DateField(auto_now_add=True)
-    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
-    folder = models.ForeignKey(FolderAwe, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='links')
