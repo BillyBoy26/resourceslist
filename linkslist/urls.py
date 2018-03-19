@@ -6,5 +6,5 @@ urlpatterns = [
     url(r'^links/(?P<pk>[0-9]+)$', views.LinkDetail.as_view()),
     # url(r'^linksbyidfolder/(?P<pk>[0-9]+)$', views.LinkListByIdFolder.as_view()),
     url(r'^categories/$', views.CategoryList.as_view()),
-    url(r'^folders/$', views.ListAwesomeList.as_view()),
+    url(r'^folders/$', views.FolderAweList.as_view()),
 ]

@@ -9,7 +9,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'parentcat')
 
 
-class ListAwesomeSerializer(serializers.ModelSerializer):
+class FolderAweSerializer(serializers.ModelSerializer):
     class Meta:
         model = FolderAwe
         fields = ('id', 'title', 'description')
