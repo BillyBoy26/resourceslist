@@ -5,7 +5,9 @@ class FolderAwe(models.Model):
     title = models.TextField()
     description = models.TextField(blank=True)
     author = models.TextField()
+    imageurl = models.TextField(blank=True)
     createdate = models.DateField(auto_now_add=True)
+    updatedate = models.DateField(auto_now=True)
 
 
 class Category(models.Model):

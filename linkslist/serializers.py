@@ -29,4 +29,4 @@ class FolderAweDetailSerializer(serializers.ModelSerializer):
 class FolderAweSerializer(serializers.ModelSerializer):
     class Meta:
         model = FolderAwe
-        fields = ('id', 'title', 'description')
+        fields = ('id', 'title', 'description', 'imageurl', 'createdate', 'updatedate')
