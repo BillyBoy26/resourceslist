@@ -25,12 +25,11 @@ class FolderAweList(generics.ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        self.createDefaultCategory(response)
+        self.createDefaultCategory(response.data['id'])
         return response
 
-    def createDefaultCategory(self, response):
+    def createDefaultCategory(self, folderid):
         # TODO on doit surement pouvoir récupérer l'objet FolderAwe avec self sans refaire un appel à la bdd
-        folderid = response.data['id']
         if folderid is not None:
             folder = FolderAwe.objects.get(id=folderid)
             if folder is not None:
