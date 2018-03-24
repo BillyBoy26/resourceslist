@@ -1,10 +1,11 @@
 # Create your views here.
+from bs4 import BeautifulSoup
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from bs4 import BeautifulSoup, SoupStrainer
-import time
 
-from linkslist.models import Category, FolderAwe, LinkData
+from linkslist.models import Category, FolderAwe
+from urlapi.views import fetchUrl
+from requests.exceptions import ConnectionError
 
 
 class BookmarkParser(APIView):
@@ -36,40 +37,26 @@ class BookmarkParser(APIView):
         return Response()
 
     def processElement(self, element, parentcat=None):
-        print('dl')
         linkChildrens = element.findChildren(['a'], recursive=False)
         if linkChildrens:
             for child in linkChildrens:
-                self.processLink(child, parentcat)
+                self.saveLink(child, parentcat)
         childrens = element.findChildren(['h3', 'dl'], recursive=False)
         if childrens:
             currentCat = parentcat
             for child in childrens:
                 balise = child.name
                 if balise == 'h3':
-                    currentCat = self.processCat(child, parentcat)
+                    currentCat = self.saveCategory(child, parentcat)
                 elif balise == 'dl':
                     self.processElement(child, currentCat)
 
-    def processCat(self, element, parentcat):
-        cat = self.saveCategory(element, parentcat)
-        print('create category ' + cat.title)
-        return cat
-
-    def processLink(self, element, category):
-        link = self.saveLink(element, category)
-        print('create link ' + link.title + ' with category ' + category.title)
-
     def saveLink(self, row, category):
         uri = row['href']
-        title = row.contents[0]
-        createdate = time.ctime(int(row['add_date']))
-        link = LinkData()
-        link.title = title
-        link.siteurl = uri
-        link.category = category
-        link.save()
-        return link
+        try:
+            fetchUrl(self.folder, uri, category)
+        except ConnectionError:
+            print('Connection error with ' + uri)
 
     def saveCategory(self, row, parentcat=None):
         cat = Category()

@@ -14,12 +14,22 @@ def createLinkData(urldatas):
         link.create(link.validated_data)
 
 
-def setLinkImageToFolderIfNone(folderid, imageurl):
-    if imageurl:
-        folder = FolderAwe.objects.get(id=folderid)
-        if not folder.imageurl:
-            folder.imageurl = imageurl
-            folder.save()
+def setLinkImageToFolderIfNone(folder, imageurl):
+    if not folder.imageurl:
+        folder.imageurl = imageurl
+        folder.save()
+
+
+def fetchUrl(folder, url, category):
+    print('fetch url ' + url)
+    r = HTMLSession().get(url, timeout=30)
+    urldatas = serializeHtml(r)
+    urldatas['siteurl'] = url
+    urldatas['category'] = category.id
+    createLinkData(urldatas)
+    if 'imageurl' in urldatas:
+        setLinkImageToFolderIfNone(folder, urldatas['imageurl'])
+    return urldatas
 
 
 class HTMLParser(APIView):
@@ -27,13 +37,7 @@ class HTMLParser(APIView):
         # TODO clean url
         url = request.data['url']
         folderid = int(request.data['idfolder'])
-
-        r = HTMLSession().get(url)
-        urldatas = serializeHtml(r)
-
-        urldatas['siteurl'] = url
-        urldatas['folder'] = folderid
-        createLinkData(urldatas)
-        setLinkImageToFolderIfNone(folderid, urldatas['imageurl'])
+        folder = FolderAwe.objects.get(id=folderid)
+        urldatas = fetchUrl(folder, url)
 
         return Response(urldatas)
