@@ -31,13 +31,11 @@ class BookmarkParser(APIView):
         folder.save()
         self.folder = folder
 
-        defaultCategory = Category.objects.create(title="Others", folder=folder)
-
-        self.processElement(dl, defaultCategory)
+        self.processElement(dl)
 
         return Response()
 
-    def processElement(self, element, parentcat):
+    def processElement(self, element, parentcat=None):
         print('dl')
         linkChildrens = element.findChildren(['a'], recursive=False)
         if linkChildrens:
