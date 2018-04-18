@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from requests_html import HTMLSession
 
-from linkslist.models import FolderAwe
+from linkslist.models import FolderAwe, Category
 from linkslist.serializers import LinkSerializer
 from urlapi.serializers import serializeHtml
 
@@ -11,7 +11,8 @@ from urlapi.serializers import serializeHtml
 def createLinkData(urldatas):
     link = LinkSerializer(data=urldatas)
     if link.is_valid():
-        link.create(link.validated_data)
+        link.save()
+    return link
 
 
 def setLinkImageToFolderIfNone(folder, imageurl):
@@ -26,18 +27,20 @@ def fetchUrl(folder, url, category):
     urldatas = serializeHtml(r)
     urldatas['siteurl'] = url
     urldatas['category'] = category.id
-    createLinkData(urldatas)
+    link = createLinkData(urldatas)
     if 'imageurl' in urldatas:
         setLinkImageToFolderIfNone(folder, urldatas['imageurl'])
-    return urldatas
+    return link
 
 
 class HTMLParser(APIView):
     def post(self, request, format=None):
         # TODO clean url
         url = request.data['url']
-        folderid = int(request.data['idfolder'])
-        folder = FolderAwe.objects.get(id=folderid)
-        urldatas = fetchUrl(folder, url)
+        folderId = int(request.data['folderId'])
+        categoryId = int(request.data['categoryId'])
+        folder = FolderAwe.objects.get(id=folderId)
+        category = Category.objects.get(id=categoryId)
+        createdLink = fetchUrl(folder, url, category)
 
-        return Response(urldatas)
+        return Response(createdLink.data)
