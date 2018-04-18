@@ -13,9 +13,9 @@ class LinkSerializer(serializers.ModelSerializer):
         return ''
 
     class Meta:
-        model = LinkData
         fields = ('id', 'title', 'description', 'imageurl',
-                  'siteurl', 'simpleSiteUrl', 'sitename', 'category')
+                  'siteurl', 'simpleSiteUrl', 'sitename', 'category', 'createdate')
+        model = LinkData
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id', 'title', 'parentcat', 'links')
+        fields = ('id', 'title', 'parentcat', 'links', 'folder')
 
 
 class FolderAweDetailSerializer(serializers.ModelSerializer):
@@ -35,6 +35,7 @@ class FolderAweDetailSerializer(serializers.ModelSerializer):
 
 
 class FolderAweSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = FolderAwe
         fields = ('id', 'title', 'description', 'imageurl', 'createdate', 'updatedate')
