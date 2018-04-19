@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from linkslist.models import Category, FolderAwe
+from linkslist.serializers import FolderAweDetailSerializer
 from urlapi.views import fetchUrl
 from requests.exceptions import ConnectionError
 
@@ -16,6 +17,10 @@ class BookmarkParser(APIView):
         # TODO test file
         bookmarkFile = request.data['bookmarks']
 
+        idFolder = None
+        if 'idFolder' in request.data:
+            idFolder = request.data['idFolder']
+
         html = bookmarkFile.read().decode().replace('<DT>', '').replace('<p>', '').replace('</p>', '')
         bookmarkFile.close()
         soup = BeautifulSoup(html, "html")
@@ -26,15 +31,20 @@ class BookmarkParser(APIView):
         if not dl:
             raise ValueError('nothing to import')
 
-        folder = FolderAwe()
-        folder.title = "Favoris"
-        folder.description = "Import des favoris"
-        folder.save()
-        self.folder = folder
+        if idFolder is None:
+            folder = FolderAwe()
+            folder.title = "Favoris"
+            folder.description = "Import des favoris"
+            folder.save()
+            self.folder = folder
+        else:
+            self.folder = FolderAwe.objects.get(id=idFolder)
 
         self.processElement(dl)
 
-        return Response()
+        folderSerializer = FolderAweDetailSerializer(self.folder)
+
+        return Response(folderSerializer.data)
 
     def processElement(self, element, parentcat=None):
         linkChildrens = element.findChildren(['a'], recursive=False)
