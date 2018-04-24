@@ -1,3 +1,4 @@
+from requests import Response
 from rest_framework import generics
 
 from linkslist.models import LinkData, Category, FolderAwe
@@ -17,6 +18,27 @@ class LinkDetail(generics.RetrieveUpdateDestroyAPIView):
 class CategoryList(generics.ListCreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        self.update_children(instance)
+        self.delete_links(instance)
+        return self.destroy(request, *args, **kwargs)
+
+    def delete_links(self, instance):
+        LinkData.objects.filter(category=instance.id).delete()
+
+    def update_children(self, catToDelete):
+        children = Category.objects.filter(parentcat=catToDelete.id)
+        for child in children:
+            child.parentcat = catToDelete.parentcat
+            child.save()
 
 
 class FolderAweList(generics.ListCreateAPIView):
