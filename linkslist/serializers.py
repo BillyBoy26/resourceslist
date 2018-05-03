@@ -1,10 +1,13 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from urllib.parse import urlparse
+from rest_framework import permissions
 
 from linkslist.models import LinkData, Category, FolderAwe
 
 
 class LinkSerializer(serializers.ModelSerializer):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     simpleSiteUrl = serializers.SerializerMethodField('getSimpleUrl')
 
     def getSimpleUrl(self, obj):
@@ -19,6 +22,7 @@ class LinkSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     links = LinkSerializer(many=True, read_only=True)
 
     class Meta:
@@ -27,6 +31,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class FolderAweDetailSerializer(serializers.ModelSerializer):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     categories = CategorySerializer(many=True, read_only=True)
 
     class Meta:
@@ -35,7 +40,17 @@ class FolderAweDetailSerializer(serializers.ModelSerializer):
 
 
 class FolderAweSerializer(serializers.ModelSerializer):
-    
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
     class Meta:
         model = FolderAwe
         fields = ('id', 'title', 'description', 'imageurl', 'createdate', 'updatedate')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    permission_classes = (permissions.IsAuthenticated,)
+    folders = FolderAweSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'folders')

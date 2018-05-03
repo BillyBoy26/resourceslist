@@ -8,6 +8,7 @@ class FolderAwe(models.Model):
     imageurl = models.TextField(blank=True)
     createdate = models.DateField(auto_now_add=True)
     updatedate = models.DateField(auto_now=True)
+    owner = models.ForeignKey('auth.User', related_name='folders', on_delete=models.CASCADE)
 
 
 class Category(models.Model):

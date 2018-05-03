@@ -1,8 +1,10 @@
+from django.contrib.auth.models import User
 from requests import Response
 from rest_framework import generics
 
 from linkslist.models import LinkData, Category, FolderAwe
-from linkslist.serializers import LinkSerializer, CategorySerializer, FolderAweSerializer, FolderAweDetailSerializer
+from linkslist.serializers import LinkSerializer, CategorySerializer, FolderAweSerializer, FolderAweDetailSerializer, \
+    UserSerializer
 
 
 class LinkList(generics.ListCreateAPIView):
@@ -61,3 +63,13 @@ class FolderAweList(generics.ListCreateAPIView):
 class FolderAweDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = FolderAwe.objects.all()
     serializer_class = FolderAweDetailSerializer
+
+
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

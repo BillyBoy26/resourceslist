@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^', include('urlapi.urls')),
     url(r'^', include('linkslist.urls')),
     url(r'^', include('bookmarksimport.urls')),
+    # url(r'^api-auth/', include('rest_framework.urls')),
 ]
