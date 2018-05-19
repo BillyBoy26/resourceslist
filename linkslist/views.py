@@ -1,5 +1,4 @@
 from django.contrib.auth.models import User
-from requests import Response
 from rest_framework import generics
 
 from linkslist.models import LinkData, Category, FolderAwe
@@ -46,6 +45,9 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 class FolderAweList(generics.ListCreateAPIView):
     queryset = FolderAwe.objects.all()
     serializer_class = FolderAweSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
