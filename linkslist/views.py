@@ -43,8 +43,10 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 class FolderAweList(generics.ListCreateAPIView):
-    queryset = FolderAwe.objects.all()
     serializer_class = FolderAweSerializer
+
+    def get_queryset(self):
+        return FolderAwe.objects.filter(owner=self.request.user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -63,8 +65,10 @@ class FolderAweList(generics.ListCreateAPIView):
 
 
 class FolderAweDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = FolderAwe.objects.all()
     serializer_class = FolderAweDetailSerializer
+
+    def get_queryset(self):
+        return FolderAwe.objects.filter(owner=self.request.user)
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
