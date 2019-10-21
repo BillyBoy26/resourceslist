@@ -18,7 +18,7 @@ django-rest-auth==0.9.3
 djangorestframework==3.7.7
 fake-useragent==0.1.10
 future==0.16.0
-httpie==0.9.9
+httpie==1.0.3
 httpie-token-auth==0.1.0
 idna==2.6
 itypes==1.1.0
