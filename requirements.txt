@@ -22,7 +22,7 @@ httpie==0.9.9
 httpie-token-auth==0.1.0
 idna==2.6
 itypes==1.1.0
-Jinja2==2.10
+Jinja2==2.11.3
 kaggle-cli==0.12.13
 lxml==4.0.0
 MarkupSafe==1.0
