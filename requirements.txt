@@ -15,7 +15,7 @@ django-allauth==0.36.0
 django-cors-headers==2.1.0
 django-material==1.0.0
 django-rest-auth==0.9.3
-djangorestframework==3.7.7
+djangorestframework==3.11.2
 fake-useragent==0.1.10
 future==0.16.0
 httpie==0.9.9
