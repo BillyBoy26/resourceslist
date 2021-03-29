@@ -35,7 +35,7 @@ Pillow==4.2.1
 prettytable==0.7.2
 progressbar2==3.34.3
 pyee==5.0.0
-Pygments==2.2.0
+Pygments==2.7.4
 pyparsing==2.2.0
 pyperclip==1.6.0
 pyppeteer==0.0.10
